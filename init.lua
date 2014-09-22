@@ -12,6 +12,7 @@ CookieCheck = optionIsOn(cookieMatch)
 WhiteCheck = optionIsOn(whiteModule)
 PathInfoFix = optionIsOn(PathInfoFix)
 attacklog = optionIsOn(attacklog)
+CCLOG = optionIsOn(CCLOG)
 CCDeny = optionIsOn(CCDeny)
 Redirect=optionIsOn(Redirect)
 function getClientIp()
@@ -38,9 +39,9 @@ function log(method,url,data,ruletag)
         local servername=ngx.var.server_name
         local time=ngx.localtime()
         if ua  then
-            line = realIp.." ["..time.."] \""..method.." "..servername..url.."\" \""..data.."\"  \""..ua.."\" \""..ruletag.."\"\n"
+            line = realIp.." ["..time.."] \""..method.." "..servername..url.."\" \""..data.."\"  \""..cookie.."\"  \""..ua.."\" \""..ruletag.."\"\n"
         else
-            line = realIp.." ["..time.."] \""..method.." "..servername..url.."\" \""..data.."\" - \""..ruletag.."\"\n"
+            line = realIp.." ["..time.."] \""..method.." "..servername..url.."\" \""..data.."\"  \""..cookie.."\" - \""..ruletag.."\"\n"
         end
         local filename = logpath..'/'..servername.."_"..ngx.today().."_sec.log"
         write(filename,line)
@@ -160,22 +161,32 @@ function cookie()
 end
 
 function denycc()
-    if CCDeny then
-        local uri=ngx.var.uri
-        CCcount=tonumber(string.match(CCrate,'(.*)/'))
-        CCseconds=tonumber(string.match(CCrate,'/(.*)'))
-        local token = getClientIp()..uri
-        local limit = ngx.shared.limit
-        local req,_=limit:get(token)
-        if req then
-            if req > CCcount then
-                 ngx.exit(503)
-                return true
+    if CCLOG then
+        if whiteip() then
+            return false
+        end
+
+        if whiteurl() then
+            return false
+        end
+
+        if CCDeny then
+            local uri=ngx.var.uri
+            CCcount=tonumber(string.match(CCrate,'(.*)/'))
+            CCseconds=tonumber(string.match(CCrate,'/(.*)'))
+            local token = getClientIp()..uri
+            local limit = ngx.shared.limit
+            local req,_=limit:get(token)
+            if req then
+                if req > CCcount then
+                     ngx.exit(503)
+                    return true
+                else
+                     limit:incr(token,1)
+                end
             else
-                 limit:incr(token,1)
+                limit:set(token,1,CCseconds)
             end
-        else
-            limit:set(token,1,CCseconds)
         end
     end
     return false

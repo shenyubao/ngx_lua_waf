@@ -1,3 +1,6 @@
+##ngx_lua_waf for Souche
+增强 CCDeny 的记录,防御功能
+更新安装脚本
 ##ngx_lua_waf
 
 ngx_lua_waf是我刚入职趣游时候开发的一个基于ngx_lua的web应用防火墙。
