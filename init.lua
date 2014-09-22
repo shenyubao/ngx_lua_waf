@@ -38,6 +38,7 @@ function log(method,url,data,ruletag)
         local ua = ngx.var.http_user_agent
         local servername=ngx.var.server_name
         local time=ngx.localtime()
+        local cookie = ngx.var.http_cookie
         if ua  then
             line = realIp.." ["..time.."] \""..method.." "..servername..url.."\" \""..data.."\"  \""..cookie.."\"  \""..ua.."\" \""..ruletag.."\"\n"
         else
