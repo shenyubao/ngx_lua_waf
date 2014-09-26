@@ -211,7 +211,7 @@ function get_boundary()
 end
 
 function whiteip()
-    if string.sub(getClientIp(), 0, 2) == "10" then
+    if string.sub(getClientIp(), 0, 3) == "10." then
         return true
     end
     if next(ipWhitelist) ~= nil then
