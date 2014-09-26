@@ -172,10 +172,9 @@ function denycc()
         end
 
         if CCDeny then
-            local uri=ngx.var.uri
             CCcount=tonumber(string.match(CCrate,'(.*)/'))
             CCseconds=tonumber(string.match(CCrate,'/(.*)'))
-            local token = getClientIp()..uri
+            local token = getClientIp()
             local limit = ngx.shared.limit
             local req,_=limit:get(token)
             if req then
@@ -212,6 +211,9 @@ function get_boundary()
 end
 
 function whiteip()
+    if string.sub(getClientIp(), 0, 2) == "10" then
+        return true
+    end
     if next(ipWhitelist) ~= nil then
         for _,ip in pairs(ipWhitelist) do
             if getClientIp()==ip then
@@ -219,7 +221,7 @@ function whiteip()
             end
         end
     end
-        return false
+    return false
 end
 
 function blockip()
