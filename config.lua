@@ -10,5 +10,5 @@ ipWhitelist={"127.0.0.1","122.224.209.110","122.224.68.242","115.29.184.157","12
 ipBlocklist={"1.0.0.1"}
 CCLOG="on"
 CCDeny="on"
-CCrate="200/7200"
+CCrate="500/7200"
 html=[[Souche Forbid, Contact: shenyuabo@souche.com~~ ]]
