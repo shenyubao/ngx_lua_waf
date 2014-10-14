@@ -11,4 +11,4 @@ ipBlocklist={"1.0.0.1"}
 CCLOG="on"
 CCDeny="on"
 CCrate="500/7200"
-html=[[Souche Forbid, Contact: shenyuabo@souche.com~~ ]]
+html=[[Souche Forbid, Contact: shenyubao@souche.com~~ ]]
